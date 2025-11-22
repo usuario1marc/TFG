@@ -1,6 +1,6 @@
 # Patient data
-data
-matlab
+data/
+matlab/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
