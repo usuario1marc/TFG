@@ -80,6 +80,49 @@ def simulate(wx:float=0.5, wy:float=0.5, eyx:float=0, exy:float=0, sigma:float=0
     return t, sol_downsampled
 
 
+def simulate_multi(N:int=10, wx:float=0.5, wy:float=0.5, eyx:float=0, exy:float=0, sigma:float=0, n_samples:int=1000, start:int=100, downsample:int=100, dt:int=0.001, seed:int=None):
+    """
+    Generate N pairs of noisy coupled Rössler dynamics (X and Y).
+    
+    Parameters
+    ----------
+    N : int
+        Number of pairs of signals to simulate.
+    wx : float
+        Natural angular frequency of dynamic X.
+    wy : float
+        Natural angular frequency of dynamic Y.
+    eyx : float
+        Coupling strength onto dynamic X by dynamic Y.
+    exy : float
+        Coupling strength onto dynamic Y by dynamic X.
+    sigma : float
+        Standard deviation of the white noise.
+    n_samples : int
+        Number of samples to return (after downsample and burn-in).
+    start : int
+        Number of initial samples to discard (to allow stabilization).
+    dt : float
+        Time step represented by each sample.
+    seed : int
+        Optionally, you may set a seed.
+    
+    Returns
+    -------
+    np.ndarray [n_samples, 6, N]
+        Dynamics of the X system (x1, x2, x3) and the Y system (y1, y2, y3).
+    """
+
+    if seed is not None:
+        np.random.seed(seed)
+
+    sol = np.zeros((n_samples, 6, N))
+    for i in range(N):
+        t, sol[:, :, i] = simulate(wx=wx, wy=wy, eyx=eyx, exy=exy, sigma=sigma, n_samples=n_samples, start=start, downsample=downsample, dt=dt)
+
+    return t, sol
+
+
 if __name__ == "__main__":
     wx = 0.5
     wy = 0.5
